@@ -1,6 +1,6 @@
 package org.nomina.model;
 
-import com.nomina.exception.ValidacionNominaException;
+import org.nomina.exception.ValidacionNominaException;
 import java.time.LocalDate;
 
 
@@ -34,7 +34,7 @@ public class EmpleadoComision extends Empleado {
     public double calcularSalarioBruto() {
         // Cálculo de la comisión estándar pactada
         double comisionEstandar = this.ventasMes * (this.porcentajeComision / 100.0);
-        double bruto Total = this.salarioBase + comisionEstandar;
+        double brutoTotal = this.salarioBase + comisionEstandar;
 
         // Regla: Si las ventas superan los $20.000.000, recibe un bono adicional del 3% sobre las ventas
         if (this.ventasMes > UMBRAL_VENTAS_BONO) {
