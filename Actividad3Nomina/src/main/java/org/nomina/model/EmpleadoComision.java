@@ -1,6 +1,6 @@
 package org.nomina.model;
 
-import org.nomina.exception.ValidacionNominaException;
+import org.nomina.exception.*;
 import java.time.LocalDate;
 
 
@@ -17,12 +17,13 @@ public class EmpleadoComision extends Empleado {
                             double salarioBase, double porcentajeComision, double ventasMes) {
         super(id, nombre, fechaIngreso);
 
-        // Tarea 2.2: Validación defensiva obligatoria utilizando nuestra excepción personalizada
+        // Excepciones
         if (ventasMes < 0) {
-            throw new ValidacionNominaException("Error de Nómina: Las ventas del mes no pueden ser valores negativos.");
+            throw new DatoNegativoException("ventasMes", ventasMes);
         }
+
         if (salarioBase < 0 || porcentajeComision < 0) {
-            throw new ValidacionNominaException("Error de Nómina: El salario base o porcentaje no pueden ser negativos.");
+            throw new DatoNegativoException("Error de Nómina: El salario base o porcentaje no pueden ser negativos.");
         }
 
         this.salarioBase = salarioBase;
