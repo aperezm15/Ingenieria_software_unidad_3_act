@@ -17,7 +17,7 @@ public class ConexionBD {
              return DriverManager.getConnection(URL, USUARIO, CONTRASEÑA);
          } catch (ClassNotFoundException e) {
              throw new ValidacionNominaException("Error de Infraestructura: No se encontro el drier de MySQL en el Classpath");
-         }catch (SQLException) {
+         }catch (SQLException e) {
              throw new ValidacionNominaException("Error de Conexion a la base de Datos: " + e.getMessage());
          }
      }
