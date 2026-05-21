@@ -1,4 +1,5 @@
 package org.nomina.model;
+import org.nomina.exception.*;
 
 import java.time.LocalDate;
 
@@ -9,6 +10,13 @@ public class EmpleadoPorHoras extends Empleado {
 
     public EmpleadoPorHoras(int id, String nombre, LocalDate fechaIngreso, double tarifaHora, int horasTrabajadas, boolean aceptaFondoAhorro) {
         super(id, nombre, fechaIngreso);
+        //Excepciones
+        if (horasTrabajadas <= 0) {
+            throw new DatoNegativoException("horasTrabajadas", horasTrabajadas);
+        }
+        if (tarifaHora <= 0) {
+            throw new DatoNegativoException("tarifaHora", tarifaHora);
+        }
         setHorasTrabajadas(horasTrabajadas); // Validación en el setter
         this.tarifaHora = tarifaHora;
         this.aceptaFondoAhorro = aceptaFondoAhorro;

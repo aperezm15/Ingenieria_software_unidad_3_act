@@ -1,7 +1,6 @@
 package org.nomina.model;
 
 import org.nomina.exception.ValidacionNominaException;
-
 import java.time.LocalDate;
 
 
