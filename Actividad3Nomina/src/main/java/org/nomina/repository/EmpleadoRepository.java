@@ -68,4 +68,57 @@ public class EmpleadoRepository {
 
         return empleados;
     }
+    public void guardar(Empleado emp) {
+        String sql = "INSERT INTO empleados (nombre, tipo_empleado, fecha_ingreso, salario_base, " +
+                "tarifa_hora, horas_trabajadas, porcentaje_comision, ventas_mes, acepta_fondo_ahorro) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, emp.getNombre());
+            ps.setDate(3, java.sql.Date.valueOf(emp.getFechaIngreso()));
+
+            // Determinar el discriminador y mapear atributos específicos según la subclase
+            if (emp instanceof EmpleadoAsalariado ea) {
+                ps.setString(2, "ASALARIADO");
+                ps.setDouble(4, ea.getSalarioMensual());
+                ps.setNull(5, java.sql.Types.DOUBLE);
+                ps.setNull(6, java.sql.Types.INTEGER);
+                ps.setNull(7, java.sql.Types.DOUBLE);
+                ps.setNull(8, java.sql.Types.DOUBLE);
+                ps.setNull(9, java.sql.Types.BOOLEAN);
+            } else if (emp instanceof EmpleadoPorHoras eph) {
+                ps.setString(2, "POR_HORAS");
+                ps.setNull(4, java.sql.Types.DOUBLE);
+                ps.setDouble(5, eph.getTarifaHora());
+                ps.setInt(6, eph.getHorasTrabajadas());
+                ps.setNull(7, java.sql.Types.DOUBLE);
+                ps.setNull(8, java.sql.Types.DOUBLE);
+                ps.setBoolean(9, eph.isAceptaFondoAhorro());
+            } else if (emp instanceof EmpleadoComision ec) {
+                ps.setString(2, "COMISION");
+                ps.setDouble(4, ec.getSalarioBase());
+                ps.setNull(5, java.sql.Types.DOUBLE);
+                ps.setNull(6, java.sql.Types.INTEGER);
+                ps.setDouble(7, ec.getPorcentajeComision());
+                ps.setDouble(8, ec.getVentasMes());
+                ps.setNull(9, java.sql.Types.BOOLEAN);
+            } else if (emp instanceof EmpleadoTemporal et) {
+                ps.setString(2, "TEMPORAL");
+                ps.setDouble(4, et.getSalarioMensual());
+                ps.setNull(5, java.sql.Types.DOUBLE);
+                ps.setNull(6, java.sql.Types.INTEGER);
+                ps.setNull(7, java.sql.Types.DOUBLE);
+                ps.setNull(8, java.sql.Types.DOUBLE);
+                ps.setNull(9, java.sql.Types.BOOLEAN);
+            }
+
+            ps.executeUpdate();
+            System.out.println("✨ [Repository] Empleado registrado exitosamente en MySQL.");
+
+        } catch (SQLException e) {
+            throw new ValidacionNominaException("Error al insertar el empleado en la base de datos: " + e.getMessage());
+        }
+    }
 }

@@ -25,4 +25,11 @@ public class EmpleadoAsalariado extends Empleado {
         return BONO_ALIMENTACION;
     }
 
+    public double getSalarioMensual() {
+        return salarioMensual;
+    }
+
+    public void setSalarioMensual(double salarioMensual) {
+        this.salarioMensual = salarioMensual;
+    }
 }

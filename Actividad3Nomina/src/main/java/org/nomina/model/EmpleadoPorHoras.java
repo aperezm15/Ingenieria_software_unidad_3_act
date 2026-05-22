@@ -49,4 +49,24 @@ public class EmpleadoPorHoras extends Empleado {
         }
         return beneficios;
     }
+
+    public double getTarifaHora() {
+        return tarifaHora;
+    }
+
+    public void setTarifaHora(double tarifaHora) {
+        this.tarifaHora = tarifaHora;
+    }
+
+    public int getHorasTrabajadas() {
+        return horasTrabajadas;
+    }
+
+    public boolean isAceptaFondoAhorro() {
+        return aceptaFondoAhorro;
+    }
+
+    public void setAceptaFondoAhorro(boolean aceptaFondoAhorro) {
+        this.aceptaFondoAhorro = aceptaFondoAhorro;
+    }
 }
