@@ -21,22 +21,39 @@ public abstract class Empleado {
     public abstract double calcularSalarioBruto();
     public abstract double calcularBeneficios();
 
+    /**
+     * Calcula de forma consolidada las deducciones de Salud, Pensión y ARL.
+     * Basado independientemente en el Salario Bruto para evitar recursión.
+     */
     public double calcularDeducciones() {
         double salarioBruto = calcularSalarioBruto();
-        double saludYPension = salarioBruto * 0.04;
+        // Salud (4%) + Pensión (4%) = 8% en total a cargo del empleado
+        double saludYPension = salarioBruto * 0.08;
         double arl = calcularARL();
         return saludYPension + arl;
     }
 
-    protected double  calcularARL() {
-        return calcularDeducciones() * 0.00522;
+    /**
+     * Calcula la ARL aplicando la tasa base (0.522%) de manera directa
+     * sobre el salario bruto, rompiendo el bucle infinito.
+     */
+    protected double calcularARL() {
+        return calcularSalarioBruto() * 0.00522;
     }
 
+    /**
+     * Ecuación financiera estándar: Bruto + Beneficios - Deducciones.
+     */
     public double calcularSalarioNeto() {
-        double neto = calcularDeducciones() * calcularBeneficios() - calcularDeducciones();
-        return Math.max(neto, 0);
+        double bruto = calcularSalarioBruto();
+        double beneficios = calcularBeneficios();
+        double deducciones = calcularDeducciones();
+
+        double neto = bruto + beneficios - deducciones;
+        return Math.max(neto, 0); // Control defensivo contra netos negativos
     }
 
+    // --- GETTERS Y SETTERS ---
     public int getId() {
         return id;
     }
