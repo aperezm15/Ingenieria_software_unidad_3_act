@@ -12,20 +12,23 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
+//Clase Repository, para tener metodos como obtener todos los empleados, con sus datos,
+//y tambien el metodo guardar para registrar empledaos.
 public class EmpleadoRepository {
-
+    //Sentencia SQL para buscar datos de empleados de la tabla empleados
     public List<Empleado> obtenerTodos() {
         List<Empleado> empleados = new ArrayList<>();
         String sql = "SELECT id, nombre, tipo_empleado, fecha_ingreso, salario_base, " +
                 "tarifa_hora, horas_trabajadas, porcentaje_comision, ventas_mes, " +
                 "acepta_fondo_ahorro FROM empleados";
 
-
+        //Se hace conexion de esta clase con el driver para la base de datos atravez de el metodo
+        //obtenerConexion de ConexionBD
         try (Connection con = ConexionBD.obtenerConexion();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
+            //Decimos que datos son los que se van a sincronizar
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String nombre = rs.getString("nombre");
@@ -33,6 +36,7 @@ public class EmpleadoRepository {
                 String tipoStr = rs.getString("tipo_empleado");
 
                 // Mapear los registros planos a la jerarquía de objetos POO (Polimorfismo de Construcción)
+                // Basicamente buscamos los datos que necesitemos, dependiendo el tipo de empleado.
                 switch (tipoStr) {
                     case "ASALARIADO" -> {
                         double salario = rs.getDouble("salario_base");
@@ -68,6 +72,7 @@ public class EmpleadoRepository {
 
         return empleados;
     }
+    //Sentencia SQL para guardar un empleado, el cual nos servira para registrar en el sistema.
     public void guardar(Empleado emp) {
         String sql = "INSERT INTO empleados (nombre, tipo_empleado, fecha_ingreso, salario_base, " +
                 "tarifa_hora, horas_trabajadas, porcentaje_comision, ventas_mes, acepta_fondo_ahorro) " +
@@ -80,6 +85,7 @@ public class EmpleadoRepository {
             ps.setDate(3, java.sql.Date.valueOf(emp.getFechaIngreso()));
 
             // Determinar el discriminador y mapear atributos específicos según la subclase
+            // Lo mismo que vimos arriba, guardamos datos dependiendo que necesitemos
             if (emp instanceof EmpleadoAsalariado ea) {
                 ps.setString(2, "ASALARIADO");
                 ps.setDouble(4, ea.getSalarioMensual());
@@ -113,10 +119,10 @@ public class EmpleadoRepository {
                 ps.setNull(8, java.sql.Types.DOUBLE);
                 ps.setNull(9, java.sql.Types.BOOLEAN);
             }
-
+            //Mensaje de exito
             ps.executeUpdate();
             System.out.println("✨ [Repository] Empleado registrado exitosamente en MySQL.");
-
+        //Si no es exito, saltara la excepcion
         } catch (SQLException e) {
             throw new ValidacionNominaException("Error al insertar el empleado en la base de datos: " + e.getMessage());
         }

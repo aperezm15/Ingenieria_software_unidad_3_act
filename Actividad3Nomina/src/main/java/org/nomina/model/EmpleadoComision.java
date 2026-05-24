@@ -3,7 +3,7 @@ package org.nomina.model;
 import org.nomina.exception.ValidacionNominaException;
 import java.time.LocalDate;
 
-
+//Clase hija extendida a empleado
 public class EmpleadoComision extends Empleado {
     private double salarioBase;
     private double porcentajeComision;
@@ -13,6 +13,7 @@ public class EmpleadoComision extends Empleado {
     private static final double BONO_ALIMENTACION = 1000000.0;
     private static final double UMBRAL_VENTAS_BONO = 20000000.0;
 
+    //constructor
     public EmpleadoComision(int id, String nombre, LocalDate fechaIngreso,
                             double salarioBase, double porcentajeComision, double ventasMes) {
         super(id, nombre, fechaIngreso);
@@ -31,6 +32,7 @@ public class EmpleadoComision extends Empleado {
     }
 
     @Override
+    //calculando salario bruto del empleado por comision,
     public double calcularSalarioBruto() {
         // Cálculo de la comisión estándar pactada
         double comisionEstandar = this.ventasMes * (this.porcentajeComision / 100.0);
